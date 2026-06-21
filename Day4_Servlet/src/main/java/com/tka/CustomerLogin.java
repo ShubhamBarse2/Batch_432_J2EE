@@ -1,0 +1,63 @@
+package com.tka;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet("/login")
+public class CustomerLogin extends HttpServlet {
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		PrintWriter out = response.getWriter();
+
+		response.setContentType("text/html");
+
+		String email = request.getParameter("email");
+		String pass = request.getParameter("pass");
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/batch432", "root", "root");
+			PreparedStatement ps = con.prepareStatement("select * from customer where email =? and password=?");
+
+			ps.setString(1, email);
+			ps.setString(2, pass);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				out.print("<h1 style = 'color:green'>" + "LOGIN SUCCESSFULLY ...! " + "</h1>");
+
+				HttpSession session = request.getSession();
+				session.setAttribute("c_Name",rs.getString(2));
+				session.setAttribute("email",rs.getString(3));
+				session.setAttribute("mobNo",rs.getLong(4));
+				session.setAttribute("city",rs.getString(5));
+				
+				RequestDispatcher rd = request.getRequestDispatcher("profile.jsp");
+				rd.include(request, response);
+
+			} else {
+				out.print("<h1 style = 'color:red'>" + "INVALID CREDENTIALS ...! " + "</h1>");
+				RequestDispatcher rd = request.getRequestDispatcher("login.html");
+				rd.include(request, response);
+			}
+
+		} catch (Exception e) {
+
+		}
+	}
+}
