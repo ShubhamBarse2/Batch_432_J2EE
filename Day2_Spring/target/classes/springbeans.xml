@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+	<bean id="e" class="com.entity.Employee">
+		<!-- <property name="empId" value="123"></property> <property name="name" 
+			value="ram"></property> <property name="city" value="pune"></property> <property 
+			name="email" value="ram@gmail.com"></property> <property name="dept" ref="dept"></property> -->
+
+
+		<constructor-arg index="0" value="124"></constructor-arg>
+		<constructor-arg index="1" value="vraj"></constructor-arg>
+		<constructor-arg index="2" value="nsk"></constructor-arg>
+		<constructor-arg index="3" value="vraj@gmail.com"></constructor-arg>
+		<constructor-arg index="4" ref="dept"></constructor-arg>
+	</bean>
+
+
+	<bean id="dept" class="com.entity.Department">
+		<!-- <property name="deptId" value="1"></property> <property name="name" 
+			value="HR"></property> -->
+
+
+		<constructor-arg index="0" value="2"></constructor-arg>
+		<constructor-arg index="1" value="Sales"></constructor-arg>
+
+	</bean>
+
+
+</beans>
